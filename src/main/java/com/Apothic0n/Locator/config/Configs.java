@@ -1,12 +1,14 @@
 package com.Apothic0n.Locator.config;
 
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class Configs {
     public static void register() {
-        registerCommonConfigs();
+        AutoConfig.register(CommonConfig.class, GsonConfigSerializer::new);
     }
 
     private static void registerCommonConfigs() {

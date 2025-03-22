@@ -1,8 +1,10 @@
 package com.Apothic0n.Locator.core.events;
 
 import com.Apothic0n.Locator.Locator;
+import com.Apothic0n.Locator.config.CommonConfig;
 import com.google.common.base.Stopwatch;
 import com.mojang.datafixers.util.Pair;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ResourceOrTagArgument;
@@ -15,13 +17,9 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import static com.Apothic0n.Locator.config.CommonConfig.scanForTerrain;
 
-@Mod.EventBusSubscriber(modid = Locator.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonForgeEvents {
     public static boolean isScanningBiome = false;
     public static BlockPos biomeScanBlockpos = null;
@@ -29,8 +27,7 @@ public class CommonForgeEvents {
     public static ResourceOrTagArgument.Result<Biome> biome = null;
     public static int attempt = 0;
 
-    @SubscribeEvent
-    public static void serverTick(TickEvent.ServerTickEvent event) {
+    public static void onServerTick(ServerTickEvents event) {
         if (isScanningBiome && biomeScanBlockpos != null && cmdSource != null && biome != null) {
             if (attempt == 0) {
                 cmdSource.sendSystemMessage(Component.literal("Now searching within an unreasonable distance."));
@@ -41,7 +38,7 @@ public class CommonForgeEvents {
             Pair<BlockPos, Holder<Biome>> pair = level.findClosestBiome3d(biome, biomeScanBlockpos, 6400, 32, 320);
             stopwatch.stop();
             if (pair != null) {
-                if (scanForTerrain.get() == true) {
+                if (scanForTerrain == true) {
                     BlockPos blockPos = pair.getFirst();
                     int seaLevel = level.getSeaLevel();
                     if (blockPos != null) {

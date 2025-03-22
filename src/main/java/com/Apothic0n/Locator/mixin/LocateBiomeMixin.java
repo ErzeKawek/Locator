@@ -39,7 +39,7 @@ public class LocateBiomeMixin {
         Pair<BlockPos, Holder<Biome>> pair = cmdSource.getLevel().findClosestBiome3d(biome, blockpos, 6400, 32, 64);
         stopwatch.stop();
         if (pair != null) {
-            if (scanForTerrain.get() == true) {
+            if (scanForTerrain == true) {
                 BlockPos blockPos = pair.getFirst();
                 int seaLevel = level.getSeaLevel();
                 if (blockPos != null) {
